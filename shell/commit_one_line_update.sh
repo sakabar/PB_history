@@ -3,10 +3,12 @@
 set -ue
 
 # 変更が1行だけか確認する
-ll=$(git diff --numstat HEAD | wc -l | awk '{print $1}')
+ll=$(git diff --numstat HEAD | wc -l | awk '{print $1}' | tr -d '\n')
+insertion=$(git diff --numstat HEAD | awk '{print $1}' | tr -d '\n')
+deletion=$(git diff --numstat HEAD | awk '{print $2}' | tr -d '\n')
 
-if [[ $ll -ne 1 ]]; then
-   echo "Error: diff is ${ll} line(s)." >&2
+if [[ $ll -ne 1 ]] || [[ $insertion -ne 1 ]] || [[ $deletion -ne 1 ]]; then
+   echo "Error: ${ll} file changed, ${insertion} insertion, ${deletion} deletion" >&2
    exit 1
 fi
 
