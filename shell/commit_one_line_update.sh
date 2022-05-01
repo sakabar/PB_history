@@ -23,6 +23,8 @@ diff_file_name=${diff_file_path:t:r}
 msg=""
 if [[ $(echo $event_col | grep -c 'のみソルブ') -eq 1 ]]; then
     event_en=$(echo $event_col | awk -F 'のみソルブ' '
+        $1 == "E" {printf("edge")}
+        $1 == "C" {printf("corner")}
         $1 == "T" {printf("t-center")}
         $1 == "X" {printf("x-center")}
         $1 == "W" {printf("w-edge")}
