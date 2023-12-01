@@ -32,6 +32,11 @@ if [[ $(echo $event_col | grep -c 'のみソルブ') -eq 1 ]]; then
 
     result=$(echo $diff_line | awk -F, '{print $3"=["$4"]+"$5}')
     msg="${diff_file_name} ${event_en} only ${result}"
+elif [[ $(echo $event_col | grep -c '日またぎ') -eq 1 ]]; then
+    event_en=$(echo $event_col | awk '{print $1" "$2" (across multiple days)"}')
+
+    result=$(echo $diff_line | awk -F, '{print $3}')
+    msg="${event_en} ${result}"
 else
     msg=$(git diff --unified=0 HEAD | grep -v '+++' | grep '^+' | sed -e 's/^+//' | awk -F, '{print $1" "$3"=["$4"]+"$5}' | sed -e 's/=\[\]+//')
 fi
